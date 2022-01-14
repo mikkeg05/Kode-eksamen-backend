@@ -37,13 +37,21 @@ public class  BookingFacade {
 
 
 
-    public List<BookingDTO> getByCar(String registrationnumber) {
+    public List<BookingDTO> getByCar(String registrationnumber) throws EntityNotFoundException {
         EntityManager em = emf.createEntityManager();
 
         try {
             Car car = em.find(Car.class, registrationnumber);
-            return BookingDTO.getDTOs(car.getBookingList());
-    } finally{
+            if (car == null) {
+                throw new EntityNotFoundException("Could not find a car with registration number " + registrationnumber);
+            } else if(car.getBookingList() == null ){
+                throw new EntityNotFoundException("Could not find any bookings for that car");
+            } else {
+                return BookingDTO.getDTOs(car.getBookingList());
+            }
+        } catch (EntityNotFoundException oo){
+        throw new WebApplicationException(oo.getMessage(), 404);
+        } finally {
             em.close();
         }
     }
@@ -93,14 +101,21 @@ public class  BookingFacade {
         }
     }
 
-    public void deleteBooking(int id){
+    public void deleteBooking(int id) throws EntityNotFoundException{
         EntityManager em = getEntityManager();
         Booking booking = em.find(Booking.class, id);
         try{
             em.getTransaction().begin();
             em.remove(booking);
             em.getTransaction().commit();
-        } finally{
+            if (booking == null){
+                throw new EntityNotFoundException("no booking with that id found");
+            }
+        } catch(EntityNotFoundException oo){
+            throw new WebApplicationException(oo.getMessage(), 404);
+        }
+
+        finally{
             em.close();
         }
 
