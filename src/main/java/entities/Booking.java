@@ -17,7 +17,7 @@ public class Booking implements Serializable {
     private String duration;
     @ManyToMany(mappedBy = "bookingList")
     private List<WashingAssistant> washingAssistantList;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne()
     private Car car;
 
     public Booking( Date date, String duration, List<WashingAssistant> washingAssistantList, Car car) {

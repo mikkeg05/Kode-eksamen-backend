@@ -49,11 +49,11 @@ public class  CarFacade {
         }
     }
 
-    public CarDTO getCar(String registrationnumber){
+    public Car getCar(String registrationnumber){
         EntityManager em = getEntityManager();
         Car car;
         car = em.find(Car.class, registrationnumber);
-        return new CarDTO(car);
+        return car;
     }
 
     public CarDTO getByUser(String username) {

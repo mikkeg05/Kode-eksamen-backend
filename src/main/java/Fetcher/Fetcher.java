@@ -29,9 +29,9 @@ public class Fetcher {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         User user = USER_FACADE.getUser("user1");
-        CarDTO car = CAR_FACADE.getCar(user.getCar().getRegistrationnumber());
 
-        System.out.println(gson.toJson(car));
+
+
 
 
 

@@ -30,7 +30,7 @@ public class  BookingFacade {
         }
         return instance;
     }
-
+    CarFacade carFacade = CarFacade.getCarFacade(emf);
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -56,7 +56,8 @@ public class  BookingFacade {
             WashingAssistant washingAssistant = new WashingAssistant(wDTO.getName(), wDTO.getPrimarylanguage(), wDTO.getYearsofexp(), wDTO.getPriceprhour());
             washingAssistantList.add(washingAssistant);
         }
-        Car car = new Car(bookingDTO.getCarDTO().getRegistrationnumber(), bookingDTO.getCarDTO().getBrand(), bookingDTO.getCarDTO().getMake(), bookingDTO.getCarDTO().getYear());
+        Car car = carFacade.getCar(bookingDTO.getCarDTO().getRegistrationnumber());
+
         Booking booking = new Booking(bookingDTO.getDate(), bookingDTO.getDuration(), washingAssistantList, car);
         try{
             em.getTransaction().begin();
@@ -80,11 +81,11 @@ public class  BookingFacade {
                 WashingAssistant washingAssistant = new WashingAssistant(washDTO.getName(), washDTO.getPrimarylanguage(), washDTO.getYearsofexp(), washDTO.getPriceprhour());
                 washList.add(washingAssistant);
             }
+
+            em.getTransaction().begin();
             booking.setDate(bookingDTO.getDate());
             booking.setDuration(bookingDTO.getDuration());
             booking.setWashingAssistantList(washList);
-            em.getTransaction().begin();
-            em.merge(booking);
             em.getTransaction().commit();
             return new BookingDTO(booking);
         } finally {
