@@ -48,6 +48,28 @@ public class  BookingFacade {
         }
     }
 
+    public BookingDTO createBooking(BookingDTO bookingDTO){
+        EntityManager em = getEntityManager();
+        List<WashingAssistant> washingAssistantList = new ArrayList<>();
+        List<WashingAssistantDTO> washingAssistantDTOS = bookingDTO.getWashingAssistantDTOList();
+        for(WashingAssistantDTO wDTO : washingAssistantDTOS){
+            WashingAssistant washingAssistant = new WashingAssistant(wDTO.getName(), wDTO.getPrimarylanguage(), wDTO.getYearsofexp(), wDTO.getPriceprhour());
+            washingAssistantList.add(washingAssistant);
+        }
+        Car car = new Car(bookingDTO.getCarDTO().getRegistrationnumber(), bookingDTO.getCarDTO().getBrand(), bookingDTO.getCarDTO().getMake(), bookingDTO.getCarDTO().getYear());
+        Booking booking = new Booking(bookingDTO.getDate(), bookingDTO.getDuration(), washingAssistantList, car);
+        try{
+            em.getTransaction().begin();
+            em.persist(booking);
+            em.getTransaction().commit();
+            return new BookingDTO(booking);
+        } finally {
+            em.close();
+        }
+
+    }
+
+
     public BookingDTO updateBooking(BookingDTO bookingDTO){
         EntityManager em = getEntityManager();
         Booking booking = em.find(Booking.class, bookingDTO.getId());

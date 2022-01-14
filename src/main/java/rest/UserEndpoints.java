@@ -74,11 +74,24 @@ public class UserEndpoints {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcar/{username}")
+    @RolesAllowed("user")
     public String getFromUser(@PathParam("username")String username) {
         CarDTO carDTO = CAR_FACADE.getByUser(username);
         return gson.toJson(carDTO);
 
     }
+
+    @Path("/createbooking")
+    @POST
+    @Produces
+    @Consumes
+    @RolesAllowed("user")
+    public String createBooking(String booking){
+        BookingDTO bookingDTO = gson.fromJson(booking, BookingDTO.class);
+        BOOKING_FACADE.createBooking(bookingDTO);
+        return("Booking successfully created");
+    }
+
 
 
 
