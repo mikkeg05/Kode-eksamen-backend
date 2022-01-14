@@ -7,6 +7,98 @@
 </head>
 <body>
 
-<div style="text-align: center"><h1>This is where documentation should be</h1></div>
+<div style="text-align: center"><h1>Unfinished Documentation</h1></div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">Method</th>
+        <th scope="col">URL</th>
+        <th scope="col">Request Body (JSON)</th>
+        <th scope="col">Response (JSON)</th>
+        <th scope="col">Error</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row">GET</th>
+        <td colspan = "2">/api/user/allwash</td>
+        <td>[WashingAssistant, WashingAssistant, ..] (1)</td>
+        <td>error (e1)</td>
+    </tr>
+
+    <tr>
+        <th scope="row">GET</th>
+        <td colspan = "2">/api/user/carbookings/{car}</td>
+        <td>BookingDTOList (3)</td>
+        <td>error (e1)(e3)</td>
+    </tr>
+    <tr>
+        <th scope="row">POST</th>
+        <td>/api/user/createcar</td>
+        <td>CarDTO (4)</td>
+        <td>String: (2)</td>
+        <td>error (e1)</td>
+    </tr>
+    </tbody>
+
+</table>
+
+<pre style="word-wrap: break-word; white-space: pre-wrap;">
+(1)
+{
+  {
+        "name": "String",
+        "primarylanguage": "String",
+        "yearsofexp": int,
+        "priceprhour": int
+    }
+}
+
+(2)
+"Car succesfully created"
+
+(3)
+    BookingDTOList{
+[
+    {
+        "id": int,
+        "date": Date,
+        "duration": "String",
+        "washingAssistantDTOList": [(1), (1), ...],
+        "carDTO": {
+            "registrationnumber": "String",
+            "brand": "String",
+            "make": "String",
+            "year": int
+        }
+    }
+]}
+
+
+(4)
+"carDTO": {
+            "registrationnumber": "String",
+            "brand": "String",
+            "make": "String",
+            "year": int
+    }
+
+
+(e) all errors are reported using this format (with the http statuscode matching the number)
+(e1)
+{
+  "code": 500,
+  "message": "Internal Server Error"
+}
+(e3)
+{
+  "code": 404
+  "message": "could not find {entity} with that {input}"
+}
+        </pre>
+
+
+
 </body>
 </html>
